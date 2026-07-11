@@ -10,45 +10,47 @@ A hands-on learning project: building a small web application from scratch (HTML
 
 ## Progress
 
-### ✅ Step 1: Web server setup
+### ✅ Phase 1: Core Application (Complete)
+
+**Step 1: Web server setup**
 - Installed LAMP stack (`apache2`, `mysql-server`, `php`, `libapache2-mod-php`, `php-mysql`)
 - Apache running and enabled on boot
 - Web root ownership fixed (`/var/www/html`) for non-sudo editing
 
-### ✅ Step 2: HTML page
-- Basic `index.html` created
+**Step 2-4: Frontend basics**
+- `index.html` — basic page structure
+- `style.css` — shared styling across all pages
+- `script.js` — simple DOM manipulation example
 
-### ✅ Step 3: CSS styling
-- `style.css` linked to `index.html`
-
-### ✅ Step 4: JavaScript
-- `script.js` — simple DOM manipulation on button click
-
-### ✅ Step 5-6: Database + connection
+**Step 5-6: Database + connection**
 - MySQL database `webapp` created
 - `users` table: `id`, `username`, `password`, `email`
 - Dedicated least-privilege MySQL user `webapp_user` (not using root in app code)
 - `db.php` — reusable MySQLi connection file
-- Connection verified via `test-connection.php`
 
-### 🔄 In progress: Real authentication system
-- ✅ `register.html` + `register.php` — registration with `password_hash()` (bcrypt), prepared statements (SQL-injection-safe by design)
-- ⬜ `login.php` — login with PHP sessions
-- ⬜ `dashboard.php` — protected page, only accessible when logged in
-- ⬜ `logout.php` — session destruction
+**Authentication system (complete):**
+- `register.html` / `register.php` — user registration with `password_hash()` (bcrypt)
+- `login.html` / `login.php` — login with `password_verify()` and PHP sessions
+- `dashboard.php` — protected page, redirects unauthenticated visitors to login
+- `logout.php` — destroys session on logout
 
-## Security principles applied so far
-- **Prepared statements** (`?` placeholders + `bind_param`) instead of raw string concatenation — prevents SQL injection
+### ⬜ Phase 2: Vulnerable Branch (Next)
+- Reintroduce common vulnerabilities on a separate `vulnerable` git branch: SQL injection, stored XSS, IDOR, broken access control
+- Document each vulnerability: description, proof of concept, impact
+
+### ⬜ Phase 3: Attack & Verify
+- Use Burp Suite and sqlmap against the local vulnerable branch
+- Document exploitation with logs/screenshots
+
+### ⬜ Phase 4: Remediate & Automate
+- Fix each vulnerability on `main`, with before/after documentation
+- Build a small Python static-analysis script to flag dangerous PHP patterns (raw SQL concatenation, unescaped output)
+
+## Security principles applied (Phase 1)
+- **Prepared statements** (`?` placeholders + `bind_param`) — prevents SQL injection
 - **Password hashing** via `password_hash()` (bcrypt + automatic salting) — never storing plain-text passwords
-- **Least-privilege database user** — app connects as `webapp_user` with access scoped only to the `webapp` database, not `root`
-- **Output escaping** via `htmlspecialchars()` — prevents reflected XSS when echoing user input back to the page
+- **Session-based authentication** — `session_start()`, `$_SESSION`, proper `session_destroy()` on logout
+- **Least-privilege database user** — app connects as `webapp_user` scoped only to the `webapp` database, not `root`
+- **Output escaping** via `htmlspecialchars()` — prevents reflected/stored XSS when echoing user input
 
-## Next steps (planned)
-1. Finish login/session/dashboard/logout flow
-2. **Step 7: APIs** — experiment with a simple API endpoint (e.g., returning JSON user data)
-3. **Step 8: Vulnerability testing** — deliberately review/introduce common flaws (SQLi, XSS, broken auth) to understand them hands-on, in this isolated local environment only
-4. **Step 9: Remediation** — fix each vulnerability found in Step 8 and document the before/after
-
-## Notes
-- This app is intentionally built and tested **locally only** — not deployed to the public internet — since Step 8 involves deliberately probing for security weaknesses.
-- Database credentials in `db.php` are placeholders for local development only.
+## Architecture

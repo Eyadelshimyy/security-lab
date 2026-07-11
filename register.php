@@ -6,15 +6,15 @@ $password = $_POST['password'];
 $email = $_POST['email'];
 
 //password hashing
-$hashedPassword = password_hash($passowrd, PASSWORD_DEFAULT);
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-$sql = "INSERT INTO USERS (username,password,email) VALUES(?, ?, ?)";
+$sql = "INSERT INTO users (username,password,email) VALUES(?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("sss",$username,$hashedPassword, $email);
 
-if($stmt->exectue()) {
+if($stmt->execute()) {
 	echo "Registration successful! <a href='login.html'>login here</a>";
 } else {
-	echo "ERROR: " . $stmt->error
+	echo "ERROR: " . $stmt->error;
 }
 ?>
