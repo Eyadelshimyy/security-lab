@@ -1,27 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Register</title>
-	<link rel="stylesheet" href="style.css">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="auth-style.css">
 </head>
 <body>
-	<h1>Register</h1>
-	<form action="register.php" method="POST">
-	
-	<label for="username">Username:</label><br>
-	<input type="text" id="username" name="username" required><br><br>
+    <div class="auth-container">
+        <div class="auth-visual">
+            <h2>Build. Break. Understand.</h2>
+            <p>Register an account and become part of an intentionally vulnerable lab environment.</p>
+            <div class="steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    Create a test account
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    Explore the attack surface
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    Learn how each flaw is fixed
+                </div>
+            </div>
+        </div>
 
-	<label for="password">Password:</label>
-	<input type="password" id="password" name="password" required><br><br>
+        <div class="auth-form">
+            <h1>Sign Up Account</h1>
+            <p>Enter your personal data to create your account.</p>
 
-	<label for="email">Email:</label><br>
-	<input type="email" id="email" name="email" required><br><br>
+            <form action="register.php" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="eg. John" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="eg. johnfrans@gmail.com" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <div class="form-hint">Must be at least 8 characters.</div>
+                </div>
+                <button type="submit" class="submit-btn">Sign Up</button>
+            </form>
 
-	<input type="submit" value="Register">
-	
-	</form>
-
-	<p><a href="login.html">Already have an account? login </a></p>
-	
+            <p class="switch-link">Already have an account? <a href="login.html">Log in</a></p>
+        </div>
+    </div>
 </body>
 </html>

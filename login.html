@@ -1,19 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title> login </title>
-	<link rel="stylesheet" href="style.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="auth-style.css">
 </head>
 <body>
-	<h1>login</h1>
-	<form action="login.php" method="POST">
-		<label for ="username">Username:</label><br>
-		<input type = "text" id="username" name="username"><br><br>
+    <div class="auth-container">
+        <div class="auth-visual">
+            <h2>Enter the Vulnerable Zone</h2>
+            <p>A deliberately breakable login system, built to learn how attacks actually work.</p>
+            <div class="steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    Submit raw, unvalidated credentials
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    Query built with unsafe string concatenation
+                </div>
+            </div>
+        </div>
 
-		<label for ="password">Password:</label><br>
-		<input type="password" id="password" name="password"><br><br>
+        <div class="auth-form">
+            <h1>Log In</h1>
+            <p>Enter your credentials to access your account.</p>
 
-		<input type="submit" values="login">
-	</form>
+            <form action="login.php" method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="eg. John" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="submit-btn">Log In</button>
+            </form>
+
+            <p class="switch-link">Don't have an account? <a href="register.html">Sign up</a></p>
+        </div>
+    </div>
 </body>
 </html>
