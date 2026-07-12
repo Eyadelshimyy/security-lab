@@ -38,9 +38,9 @@ $searchPlaceholder = 'Search learning goals';
 
             <div class="bento-grid" style="grid-template-columns: 1fr;">
                 <div class="growth-panel" style="justify-content: center; align-items: center; flex-direction: row; gap: 40px; min-height: unset; padding: 24px;">
-                    <div class="gauge" style="width:110px; height:110px; background: conic-gradient(white 0deg, white <?php echo round(($goalAvg / 100) * 360); ?>deg, rgba(255,255,255,0.15) <?php echo round(($goalAvg / 100) * 360); ?>deg 360deg);">
+                    <div class="gauge" data-gauge="<?php echo $goalAvg; ?>" style="width:110px; height:110px; --gauge-color:#ffffff; --track-color: rgba(255,255,255,0.15);">
                         <div class="gauge-value" style="color:white;">
-                            <span class="num" style="color:white; font-size:20px;"><?php echo $goalAvg; ?>%</span>
+                            <span class="num" style="color:white; font-size:20px;"><span data-count-to="<?php echo $goalAvg; ?>">0</span>%</span>
                             <span class="label" style="color:rgba(255,255,255,0.7);">Avg. progress</span>
                         </div>
                     </div>
@@ -62,13 +62,13 @@ $searchPlaceholder = 'Search learning goals';
                                     <div style="flex:1;">
                                         <div class="habit-name"><?php echo htmlspecialchars($goal['title']); ?></div>
                                         <div style="background:#1f1f1f; border-radius:20px; height:6px; margin-top:8px; overflow:hidden;">
-                                            <div style="width:<?php echo (int) $goal['progress']; ?>%; height:100%; background:linear-gradient(90deg, #4fae94, #2d6a5f);"></div>
+                                            <div class="bar-fill-h" data-bar-width="<?php echo (int) $goal['progress']; ?>" style="width:0%; height:100%; background:linear-gradient(90deg, #4fae94, #2d6a5f); transition: width 0.9s cubic-bezier(.16,1,.3,1); box-shadow: 0 0 10px -2px rgba(79,174,148,0.8);"></div>
                                         </div>
                                     </div>
                                     <form action="update-learning-goal.php" method="POST" style="margin:0 0 0 16px; display:flex; align-items:center; gap:8px;">
                                         <?php csrf_field(); ?>
                                         <input type="hidden" name="goal_id" value="<?php echo (int) $goal['id']; ?>">
-                                        <input type="number" name="progress" min="0" max="100" value="<?php echo (int) $goal['progress']; ?>" style="width:60px; padding:6px 8px; background:#1c1c1c; border:1px solid #333; border-radius:8px; color:white; font-size:12px;">
+                                        <input type="number" name="progress" class="field" min="0" max="100" value="<?php echo (int) $goal['progress']; ?>" style="width:60px; padding:6px 8px; font-size:12px;">
                                         <button type="submit" class="details-btn" style="width:auto; padding:8px 12px;">Update</button>
                                     </form>
                                     <form action="delete-learning-goal.php" method="POST" style="margin:0 0 0 8px;" data-confirm="Delete this learning goal?">
@@ -86,8 +86,8 @@ $searchPlaceholder = 'Search learning goals';
 
                     <form action="add-learning-goal.php" method="POST" style="margin-top: 14px; display: flex; gap: 8px;">
                         <?php csrf_field(); ?>
-                        <input type="text" name="title" placeholder="New learning goal" required maxlength="150" style="flex:1; padding:8px 12px; background:#1c1c1c; border:1px solid #333; border-radius:8px; color:white; font-size:13px;">
-                        <button type="submit" style="padding:8px 16px; background:#2d6a5f; color:white; border:none; border-radius:8px; font-size:13px; cursor:pointer;">Add</button>
+                        <input type="text" name="title" class="field" placeholder="New learning goal" required maxlength="150" style="flex:1;">
+                        <button type="submit" class="btn-add">Add</button>
                     </form>
                 </div>
             </div>

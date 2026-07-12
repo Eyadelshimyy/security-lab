@@ -38,7 +38,6 @@ $learningTotal = $learningRow['total'] ?? 0;
 
 $overallScore = round(($habitPercent + $learningAvg + (min(100, 100 - (($totalExpense / max($totalIncome, 1)) * 100)))) / 3);
 $overallScore = max(0, min(100, $overallScore));
-$overallDeg = round(($overallScore / 100) * 360);
 
 $totalHabitsCount = $habitTotal;
 $weeklyTrend = [];
@@ -78,9 +77,9 @@ $activeNav = 'home';
 
             <div class="bento-grid">
                 <div class="growth-panel" style="justify-content: center; align-items: center; flex-direction: row; gap: 40px;">
-                    <div class="gauge" style="width:160px; height:160px; background: conic-gradient(white 0deg, white <?php echo $overallDeg; ?>deg, rgba(255,255,255,0.15) <?php echo $overallDeg; ?>deg 360deg);">
+                    <div class="gauge" data-gauge="<?php echo $overallScore; ?>" style="width:160px; height:160px; --gauge-color:#ffffff; --track-color: rgba(255,255,255,0.15);">
                         <div class="gauge-value" style="color:white;">
-                            <span class="num" style="color:white;"><?php echo $overallScore; ?></span>
+                            <span class="num" style="color:white;"><span data-count-to="<?php echo $overallScore; ?>">0</span></span>
                             <span class="label" style="color:rgba(255,255,255,0.7);">Performance</span>
                         </div>
                     </div>
@@ -130,28 +129,28 @@ $activeNav = 'home';
                 </div>
 
                 <div style="display:flex; gap:16px; margin-bottom:24px;">
-                    <div style="flex:1; background:#1a1a1a; border-radius:12px; padding:16px; text-align:center;">
-                        <div style="font-size:22px; font-weight:700;"><?php echo $totalHabitsCount; ?></div>
-                        <div style="font-size:11px; color:#999;">Total Habits</div>
+                    <div style="flex:1; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
+                        <div style="font-size:22px; font-weight:700;"><span data-count-to="<?php echo $totalHabitsCount; ?>">0</span></div>
+                        <div style="font-size:11px; color:var(--text-dim);">Total Habits</div>
                     </div>
-                    <div style="flex:1; background:#1a1a1a; border-radius:12px; padding:16px; text-align:center;">
-                        <div style="font-size:22px; font-weight:700;"><?php echo $totalTransactions; ?></div>
-                        <div style="font-size:11px; color:#999;">Transactions Logged</div>
+                    <div style="flex:1; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
+                        <div style="font-size:22px; font-weight:700;"><span data-count-to="<?php echo $totalTransactions; ?>">0</span></div>
+                        <div style="font-size:11px; color:var(--text-dim);">Transactions Logged</div>
                     </div>
-                    <div style="flex:1; background:#1a1a1a; border-radius:12px; padding:16px; text-align:center;">
-                        <div style="font-size:22px; font-weight:700;"><?php echo $learningTotal; ?></div>
-                        <div style="font-size:11px; color:#999;">Learning Goals</div>
+                    <div style="flex:1; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
+                        <div style="font-size:22px; font-weight:700;"><span data-count-to="<?php echo $learningTotal; ?>">0</span></div>
+                        <div style="font-size:11px; color:var(--text-dim);">Learning Goals</div>
                     </div>
-                    <div style="flex:1; background:#1a1a1a; border-radius:12px; padding:16px; text-align:center;">
-                        <div style="font-size:22px; font-weight:700; color:#7fbfae;"><?php echo $overallScore; ?>%</div>
-                        <div style="font-size:11px; color:#999;">Overall Score</div>
+                    <div style="flex:1; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
+                        <div style="font-size:22px; font-weight:700; color:var(--accent-strong);"><span data-count-to="<?php echo $overallScore; ?>">0</span>%</div>
+                        <div style="font-size:11px; color:var(--text-dim);">Overall Score</div>
                     </div>
                 </div>
 
                 <div style="display:flex; align-items:flex-end; gap:14px; height:140px; padding:0 10px;">
                     <?php foreach ($weeklyTrend as $day): ?>
                         <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end;">
-                            <div style="width:100%; max-width:36px; height:<?php echo max(4, $day['percent']); ?>%; background:linear-gradient(180deg, #4fae94, #2d6a5f); border-radius:8px 8px 0 0; transition:height 0.3s ease;"></div>
+                            <div class="bar-fill" data-bar-height="<?php echo max(4, $day['percent']); ?>" style="width:100%; max-width:36px; height:4%; background:linear-gradient(180deg, #4fae94, #2d6a5f); border-radius:8px 8px 0 0; transition:height 0.7s cubic-bezier(.16,1,.3,1); box-shadow: 0 0 16px -6px rgba(79,174,148,0.7);"></div>
                             <div style="font-size:11px; color:#777;"><?php echo $day['label']; ?></div>
                         </div>
                     <?php endforeach; ?>

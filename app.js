@@ -66,9 +66,63 @@
         });
     }
 
+    function animateGauges() {
+        var gauges = document.querySelectorAll('[data-gauge]');
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                gauges.forEach(function (gauge) {
+                    var percent = Math.max(0, Math.min(100, parseFloat(gauge.getAttribute('data-gauge')) || 0));
+                    gauge.style.setProperty('--gauge-deg', (percent * 3.6) + 'deg');
+                });
+            });
+        });
+    }
+
+    function animateBars() {
+        var bars = document.querySelectorAll('.bar-fill');
+        bars.forEach(function (bar, i) {
+            var target = bar.getAttribute('data-bar-height') + '%';
+            window.setTimeout(function () {
+                bar.style.height = target;
+            }, 80 + i * 60);
+        });
+
+        var hBars = document.querySelectorAll('.bar-fill-h');
+        hBars.forEach(function (bar, i) {
+            var target = bar.getAttribute('data-bar-width') + '%';
+            window.setTimeout(function () {
+                bar.style.width = target;
+            }, 80 + i * 60);
+        });
+    }
+
+    function animateCounters() {
+        var counters = document.querySelectorAll('[data-count-to]');
+        var duration = 900;
+        counters.forEach(function (el) {
+            var target = parseFloat(el.getAttribute('data-count-to')) || 0;
+            var start = performance.now();
+
+            function tick(now) {
+                var progress = Math.min(1, (now - start) / duration);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.round(target * eased);
+                if (progress < 1) {
+                    requestAnimationFrame(tick);
+                } else {
+                    el.textContent = target;
+                }
+            }
+            requestAnimationFrame(tick);
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         showFlash();
         wireSearch();
         wireDeleteConfirm();
+        animateGauges();
+        animateBars();
+        animateCounters();
     });
 })();

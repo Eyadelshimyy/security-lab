@@ -10,11 +10,24 @@ $today = date("Y-m-d");
 
 $habitQuery = $conn->prepare("SELECT h.id, h.name, h.time_of_day,
     (SELECT COUNT(*) FROM habit_logs WHERE habit_id = h.id AND log_date = ?) as done_today,
-    (SELECT COUNT(*) FROM habit_logs WHERE habit_id = h.id AND log_date >= DATE_SUB(?, INTERVAL 6 DAY)) as done_this_week
+    (SELECT COUNT(*) FROM habit_logs WHERE habit_id = h.id AND log_date >= DATE_SUB(?, INTERVAL 6 DAY)) as done_this_week,
+    (SELECT GROUP_CONCAT(log_date ORDER BY log_date DESC) FROM habit_logs WHERE habit_id = h.id) as log_dates
     FROM habits h WHERE h.user_id = ? ORDER BY h.created_at DESC, h.id DESC");
 $habitQuery->bind_param("ssi", $today, $today, $user_id);
 $habitQuery->execute();
 $habits = $habitQuery->get_result()->fetch_all(MYSQLI_ASSOC);
+
+function habit_streak($logDatesCsv, $today) {
+    if (!$logDatesCsv) return 0;
+    $loggedDays = array_flip(explode(',', $logDatesCsv));
+    $cursor = isset($loggedDays[$today]) ? $today : date('Y-m-d', strtotime($today . ' -1 day'));
+    $streak = 0;
+    while (isset($loggedDays[$cursor])) {
+        $streak++;
+        $cursor = date('Y-m-d', strtotime($cursor . ' -1 day'));
+    }
+    return $streak;
+}
 
 $habitTotal = count($habits);
 $habitDone = 0;
@@ -73,10 +86,11 @@ $searchPlaceholder = 'Search your habits';
                                 <?php
                                 $checkedClass = $habit['done_today'] > 0 ? 'done' : '';
                                 $weekPercent = round(($habit['done_this_week'] / 7) * 100);
+                                $streak = habit_streak($habit['log_dates'], $today);
                                 ?>
                                 <div class="habit-chip" data-search-text="<?php echo htmlspecialchars($habit['name'] . ' ' . $habit['time_of_day']); ?>">
                                     <div>
-                                        <div class="habit-name"><?php echo htmlspecialchars($habit['name']); ?></div>
+                                        <div class="habit-name"><?php echo htmlspecialchars($habit['name']); ?><?php if ($streak > 0): ?> <span class="streak">&#128293; <?php echo $streak; ?></span><?php endif; ?></div>
                                         <div class="habit-time"><?php echo htmlspecialchars($habit['time_of_day']); ?> &middot; <?php echo $weekPercent; ?>% this week</div>
                                     </div>
                                     <div style="display:flex; align-items:center; gap:10px;">
@@ -101,9 +115,9 @@ $searchPlaceholder = 'Search your habits';
 
                     <form action="add-habit.php" method="POST" style="margin-top: 14px; display: flex; gap: 8px;">
                         <?php csrf_field(); ?>
-                        <input type="text" name="habit_name" placeholder="New habit" required maxlength="100" style="flex:1; padding:8px 12px; background:#1c1c1c; border:1px solid #333; border-radius:8px; color:white; font-size:13px;">
-                        <input type="text" name="habit_time" placeholder="Time" maxlength="50" style="width:80px; padding:8px 12px; background:#1c1c1c; border:1px solid #333; border-radius:8px; color:white; font-size:13px;">
-                        <button type="submit" style="padding:8px 16px; background:#2d6a5f; color:white; border:none; border-radius:8px; font-size:13px; cursor:pointer;">Add</button>
+                        <input type="text" name="habit_name" class="field" placeholder="New habit" required maxlength="100" style="flex:1;">
+                        <input type="text" name="habit_time" class="field" placeholder="Time" maxlength="50" style="width:80px;">
+                        <button type="submit" class="btn-add">Add</button>
                     </form>
                 </div>
             </div>

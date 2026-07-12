@@ -21,7 +21,6 @@ $totalIncome = $balanceRow['total_income'] ?? 0;
 $totalExpense = $balanceRow['total_expense'] ?? 0;
 $balance = $totalIncome - $totalExpense;
 $percentUsed = $monthlyBudget > 0 ? min(100, round(($totalExpense / $monthlyBudget) * 100)) : 0;
-$gaugeDeg = round(($percentUsed / 100) * 360);
 
 $txQuery = $conn->prepare("SELECT id, description, amount, type, created_at FROM transactions WHERE user_id = ? ORDER BY created_at DESC, id DESC");
 $txQuery->bind_param("i", $user_id);
@@ -50,9 +49,9 @@ $searchPlaceholder = 'Search transactions';
                         <h2>Monthly Budget</h2>
                     </div>
                     <div class="gauge-wrap">
-                        <div class="gauge" style="--gauge-deg: <?php echo $gaugeDeg; ?>deg; background: conic-gradient(#4fae94 0deg, #4fae94 <?php echo $gaugeDeg; ?>deg, #1f1f1f <?php echo $gaugeDeg; ?>deg 360deg);">
+                        <div class="gauge" data-gauge="<?php echo $percentUsed; ?>">
                             <div class="gauge-value">
-                                <span class="num"><?php echo $percentUsed; ?>%</span>
+                                <span class="num"><span data-count-to="<?php echo $percentUsed; ?>">0</span>%</span>
                                 <span class="label">Used</span>
                             </div>
                         </div>
@@ -72,10 +71,10 @@ $searchPlaceholder = 'Search transactions';
                     </div>
                     <form action="add-transaction.php" method="POST" style="display:flex; flex-direction:column; gap:10px;">
                         <?php csrf_field(); ?>
-                        <input type="text" name="description" placeholder="Description" required maxlength="255" style="padding:10px 12px; background:#1c1c1c; border:1px solid #333; border-radius:8px; color:white; font-size:13px;">
+                        <input type="text" name="description" class="field" placeholder="Description" required maxlength="255">
                         <div style="display:flex; gap:8px;">
-                            <input type="number" step="0.01" min="0.01" name="amount" placeholder="Amount" required style="flex:1; padding:10px 12px; background:#1c1c1c; border:1px solid #333; border-radius:8px; color:white; font-size:13px;">
-                            <select name="type" style="padding:10px 12px; background:#1c1c1c; border:1px solid #333; border-radius:8px; color:white; font-size:13px;">
+                            <input type="number" step="0.01" min="0.01" name="amount" class="field" placeholder="Amount" required style="flex:1;">
+                            <select name="type" class="field">
                                 <option value="expense">Expense</option>
                                 <option value="income">Income</option>
                             </select>

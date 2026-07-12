@@ -1,3 +1,18 @@
+:root {
+    --bg: #060907;
+    --surface: rgba(255, 255, 255, 0.035);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(127, 191, 174, 0.35);
+    --accent: #4fae94;
+    --accent-strong: #7fbfae;
+    --accent-dark: #2d6a5f;
+    --accent-soft: rgba(79, 174, 148, 0.16);
+    --text: #f3f6f4;
+    --text-dim: #98a39d;
+    --text-faint: #66716c;
+    --danger: #d97b7b;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +21,7 @@
 
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #0d0d0d;
+    background: var(--bg);
     height: 100vh;
     width: 100vw;
     font-size: 16px;
@@ -16,40 +31,59 @@ body {
     display: flex;
     width: 100%;
     height: 100vh;
-    background: #000000;
+    background: var(--bg);
 }
 
 /* Left panel */
 .auth-visual {
     flex: 7;
-    background: linear-gradient(160deg, #2d6a5f 0%, #0d1f1c 100%);
+    background: linear-gradient(160deg, var(--accent-dark) 0%, #0a1a17 100%);
     padding: 60px 80px 90px 80px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-visual::before {
+    content: '';
+    position: absolute;
+    width: 480px;
+    height: 480px;
+    top: -160px;
+    right: -120px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .auth-visual h2 {
     margin-top: 50vh;
     font-size: 36px;
     margin-bottom: 10px;
+    position: relative;
 }
 
 .auth-visual p {
     font-size: 16px;
     opacity: 0.85;
     margin-bottom: 28px;
+    position: relative;
 }
 
 .steps {
     display: flex;
     gap: 20px;
     max-width: 960px;
+    position: relative;
 }
 
 .step {
-    background: rgba(255,255,255,0.08);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
     border-radius: 20px;
     padding: 28px;
     flex: 1;
@@ -69,7 +103,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     text-align: center;
     line-height: 40px;
     font-size: 22px;
@@ -80,6 +114,7 @@ body {
 .step.active {
     background: white;
     color: #111;
+    box-shadow: 0 0 30px -6px rgba(255, 255, 255, 0.4);
 }
 
 .step.active .step-number {
@@ -90,7 +125,7 @@ body {
 /* Right panel (form) */
 .auth-form {
     flex: 3;
-    background: #000000;
+    background: var(--bg);
     padding: 60px 80px;
     color: white;
     display: flex;
@@ -98,6 +133,20 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-form::before {
+    content: '';
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    bottom: -200px;
+    left: -160px;
+    background: radial-gradient(circle, rgba(79, 174, 148, 0.16) 0%, rgba(79, 174, 148, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .auth-form h1 {
@@ -105,18 +154,21 @@ body {
     margin-bottom: 6px;
     text-align: center;
     width: 100%;
+    position: relative;
 }
 
 .auth-form > p {
     font-size: 15px;
-    color: #999;
+    color: var(--text-dim);
     margin-bottom: 28px;
     text-align: center;
     width: 100%;
+    position: relative;
 }
 
 .auth-form form {
     width: 100%;
+    position: relative;
 }
 
 .form-row {
@@ -140,8 +192,9 @@ body {
 .form-group input {
     width: 100%;
     padding: 13px 15px;
-    background: #1c1c1c;
-    border: 1px solid #333;
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
     border-radius: 10px;
     color: white;
     font-size: 16px;
@@ -151,14 +204,14 @@ body {
 .form-group input:focus,
 .form-group input:not(:placeholder-shown) {
     outline: none;
-    background: #000000;
-    border-color: #2d6a5f;
-    box-shadow: 0 0 0 3px rgba(45, 106, 95, 0.35);
+    background: rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-dark);
+    box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .form-hint {
     font-size: 12px;
-    color: #666;
+    color: var(--text-faint);
     margin-top: 4px;
 }
 
@@ -173,11 +226,12 @@ body {
     font-weight: 600;
     cursor: pointer;
     margin-top: 6px;
-    transition: background-color 0.3s ease, transform 0.15s ease;
+    transition: box-shadow 0.3s ease, transform 0.15s ease, background-color 0.3s ease;
 }
 
 .submit-btn:hover {
     background: #eee;
+    box-shadow: 0 0 30px -8px rgba(255, 255, 255, 0.5);
 }
 
 .submit-btn:active {
@@ -188,8 +242,9 @@ body {
     text-align: center;
     margin-top: 20px;
     font-size: 14px;
-    color: #999;
+    color: var(--text-dim);
     width: 100%;
+    position: relative;
 }
 
 .switch-link a {
@@ -206,6 +261,13 @@ body {
     font-weight: 600;
     margin-bottom: 20px;
     text-align: left;
+    position: relative;
+    animation: fadeInUp 0.35s ease both;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .auth-banner.error {
@@ -215,13 +277,13 @@ body {
 }
 
 .auth-banner.success {
-    background: rgba(45, 106, 95, 0.2);
-    color: #7fbfae;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
     border: 1px solid rgba(45, 106, 95, 0.5);
 }
 
 .form-hint.hint-ok {
-    color: #7fbfae;
+    color: var(--accent-strong);
 }
 
 @media (max-width: 900px) {
