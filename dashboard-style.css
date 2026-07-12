@@ -432,3 +432,133 @@ html {
 .app-shell {
     width: 100%;
 }
+
+.placeholder-text {
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+    padding: 24px 0;
+}
+
+.icon-delete-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.icon-delete-btn:hover {
+    background: rgba(217, 123, 123, 0.15);
+    border-color: #d97b7b;
+    color: #d97b7b;
+}
+
+.flash-toast {
+    position: fixed;
+    top: 90px;
+    right: 36px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    background: #2d6a5f;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 100;
+}
+
+.flash-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.flash-toast.error {
+    background: #a14444;
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: #2d6a5f;
+}
+
+@media (max-width: 900px) {
+    .app-shell {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        padding: 12px 0;
+        border-right: none;
+        border-bottom: 1px solid #1f1f1f;
+    }
+
+    .sidebar .bottom-icon {
+        margin-top: 0;
+    }
+
+    .main-area {
+        padding: 20px;
+    }
+
+    .bento-grid,
+    .bottom-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    .topbar .search-bar {
+        max-width: none;
+    }
+}
+
+@media (max-width: 520px) {
+    .topbar {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .search-bar {
+        order: 2;
+        flex-basis: 100%;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .week-row {
+        gap: 4px;
+    }
+
+    .day-col {
+        padding: 6px 2px;
+        font-size: 10px;
+    }
+
+    .day-col .day-num {
+        font-size: 13px;
+    }
+
+    .card form[style*="display: flex"],
+    .card form[style*="display:flex"] {
+        flex-wrap: wrap;
+    }
+
+    .card form[style*="display: flex"] input,
+    .card form[style*="display:flex"] input {
+        min-width: 0;
+    }
+}

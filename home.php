@@ -1,11 +1,6 @@
 <?php
-session_start();
-require "db.php";
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
-    exit();
-}
+require "auth.php";
+require_login();
 
 $displayName = htmlspecialchars($_SESSION['username']);
 $initial = strtoupper(substr($_SESSION['username'], 0, 1));
@@ -65,6 +60,8 @@ $totalTransactionsQuery = $conn->prepare("SELECT COUNT(*) as total FROM transact
 $totalTransactionsQuery->bind_param("i", $user_id);
 $totalTransactionsQuery->execute();
 $totalTransactions = $totalTransactionsQuery->get_result()->fetch_assoc()['total'] ?? 0;
+
+$activeNav = 'home';
 ?>
 <!DOCTYPE html>
 <html>
@@ -74,36 +71,10 @@ $totalTransactions = $totalTransactionsQuery->get_result()->fetch_assoc()['total
 </head>
 <body>
     <div class="app-shell">
-        <div class="sidebar">
-            <div class="logo">L</div>
-            <a href="home.php" class="nav-icon active" title="Home">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
-            </a>
-            <a href="habits.php" class="nav-icon" title="Habits">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </a>
-            <a href="finance.php" class="nav-icon" title="Finance">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            </a>
-            <a href="learning.php" class="nav-icon" title="Learning">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-            </a>
-            <a href="#" class="nav-icon bottom-icon" title="Settings">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </a>
-        </div>
+        <?php require "nav.php"; ?>
 
         <div class="main-area">
-            <div class="topbar">
-                <input class="search-bar" type="text" placeholder="Enter your search request" disabled>
-                <div class="topbar-right">
-                    <div class="icon-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                    </div>
-                    <div class="user-avatar"><?php echo $initial; ?></div>
-                    <a href="logout.php" class="logout-link">Logout</a>
-                </div>
-            </div>
+            <?php require "topbar.php"; ?>
 
             <div class="bento-grid">
                 <div class="growth-panel" style="justify-content: center; align-items: center; flex-direction: row; gap: 40px;">
@@ -188,5 +159,6 @@ $totalTransactions = $totalTransactionsQuery->get_result()->fetch_assoc()['total
             </div>
         </div>
     </div>
+    <script src="app.js"></script>
 </body>
 </html>

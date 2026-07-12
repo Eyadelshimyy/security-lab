@@ -1,20 +1,39 @@
 <?php
-require "db.php";
+require "bootstrap.php";
 
-$username = $_POST['username'];
-$password = $_POST['password'];
-$email = $_POST['email'];
+$username = trim($_POST['username'] ?? '');
+$email = trim($_POST['email'] ?? '');
+$password = $_POST['password'] ?? '';
 
-//password hashing
+$usernameValid = $username !== '' && mb_strlen($username) <= 50;
+$emailValid = $email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+$passwordValid = mb_strlen($password) >= 8;
+
+if (!$usernameValid || !$emailValid) {
+    header("Location: register.html?error=invalid");
+    exit();
+}
+
+if (!$passwordValid) {
+    header("Location: register.html?error=weakpass");
+    exit();
+}
+
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-$sql = "INSERT INTO users (username,password,email) VALUES(?, ?, ?)";
+$sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sss",$username,$hashedPassword, $email);
+$stmt->bind_param("sss", $username, $hashedPassword, $email);
 
-if($stmt->execute()) {
-	echo "Registration successful! <a href='login.html'>login here</a>";
-} else {
-	echo "ERROR: " . $stmt->error;
+try {
+    $stmt->execute();
+    header("Location: login.html?registered=1");
+    exit();
+} catch (mysqli_sql_exception $e) {
+    if ($conn->errno === 1062) {
+        header("Location: register.html?error=duplicate");
+        exit();
+    }
+    header("Location: register.html?error=server_error");
+    exit();
 }
-?>

@@ -1,28 +1,31 @@
 <?php
-session_start();
-require "db.php";
+require "bootstrap.php";
 
- $username = $_POST['username'];
- $password = $_POST['password'];
+$username = trim($_POST['username'] ?? '');
+$password = $_POST['password'] ?? '';
 
- $sql = "select * from users where username = ?";
- $stmt = $conn->prepare($sql);
- $stmt->bind_param("s", $username);
- $stmt->execute();
- $result = $stmt->get_result();
+if ($username === '' || $password === '') {
+    header("Location: login.html?error=invalid");
+    exit();
+}
 
- if ($result->num_rows > 0) {
-	$user = $result->fetch_assoc();
+$sql = "select * from users where username = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
 
-	if (password_verify($password , $user['password'])){
-		$_SESSION['user_id'] = $user['id'];
-		$_SESSION['username'] = $user['username'];
-		header("location: dashboard.php");
-		exit();	
-	} else {
-		echo "Invalid password.";
-	}
-} else {
-		echo "No user found with that username.";
-	} 
-?>
+$user = $result->num_rows > 0 ? $result->fetch_assoc() : null;
+
+// Same generic message whether the username doesn't exist or the password is
+// wrong, so a visitor can't use this form to enumerate registered usernames.
+if (!$user || !password_verify($password, $user['password'])) {
+    header("Location: login.html?error=invalid");
+    exit();
+}
+
+session_regenerate_id(true);
+$_SESSION['user_id'] = $user['id'];
+$_SESSION['username'] = $user['username'];
+header("Location: home.php");
+exit();

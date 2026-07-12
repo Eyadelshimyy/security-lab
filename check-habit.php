@@ -1,16 +1,22 @@
 <?php
-session_start();
-require "db.php";
+require "auth.php";
+require "csrf.php";
+require_login();
+csrf_verify();
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
+$user_id = $_SESSION['user_id'];
+$habit_id = (int) ($_POST['habit_id'] ?? 0);
+$today = date("Y-m-d");
+
+// Make sure the habit actually belongs to the logged-in user before touching it.
+$owns = $conn->prepare("SELECT id FROM habits WHERE id = ? AND user_id = ?");
+$owns->bind_param("ii", $habit_id, $user_id);
+$owns->execute();
+if ($owns->get_result()->num_rows === 0) {
+    header("Location: habits.php");
     exit();
 }
 
-$habit_id = $_POST['habit_id'];
-$today = date("Y-m-d");
-
-// Check if a log already exists for today
 $check = $conn->prepare("SELECT id FROM habit_logs WHERE habit_id = ? AND log_date = ?");
 $check->bind_param("is", $habit_id, $today);
 $check->execute();
@@ -28,6 +34,5 @@ if ($existing->num_rows > 0) {
     $stmt->execute();
 }
 
-header("Location: dashboard.php");
+header("Location: habits.php");
 exit();
-?>

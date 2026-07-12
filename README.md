@@ -8,6 +8,12 @@ A hands-on learning project: building a small web application from scratch (HTML
 - PHP 8 + MySQLi
 - MySQL 8.0
 
+## Setup
+```
+mysql -u root -p < schema.sql
+```
+This creates the `webapp` database, the least-privilege `webapp_user` account, and all five tables (`users`, `habits`, `habit_logs`, `transactions`, `learning_goals`). Point Apache's document root at this directory and visit `index.html`.
+
 ## Progress
 
 ### ✅ Phase 1: Core Application (Complete)
@@ -29,10 +35,19 @@ A hands-on learning project: building a small web application from scratch (HTML
 - `db.php` — reusable MySQLi connection file
 
 **Authentication system (complete):**
-- `register.html` / `register.php` — user registration with `password_hash()` (bcrypt)
-- `login.html` / `login.php` — login with `password_verify()` and PHP sessions
-- `dashboard.php` — protected page, redirects unauthenticated visitors to login
+- `register.html` / `register.php` — user registration with `password_hash()` (bcrypt), server-side validation, and friendly inline error banners (invalid input, weak password, duplicate username/email)
+- `login.html` / `login.php` — login with `password_verify()` and PHP sessions, generic "invalid username or password" message to avoid user enumeration, session ID regenerated on login
 - `logout.php` — destroys session on logout
+
+**Multi-page dashboard (complete):**
+- `home.php` — overview page: performance gauge, today's habit completion, finance balance, learning progress, 7-day trend
+- `habits.php` — full habit tracker: real weekly calendar strip, add/check/delete habits, per-habit weekly completion rate
+- `finance.php` — full finance tracker: budget gauge, add/delete transactions, complete transaction history
+- `learning.php` — learning goal tracker: add goals, update progress, delete goals
+- `dashboard.php` — kept as a redirect to `home.php` for old bookmarks/links
+- Shared `nav.php` / `topbar.php` partials keep navigation and the active-page highlight consistent across all four pages
+- CSRF tokens (`csrf.php`) on every state-changing form; ownership checks on every update/delete so one user can't touch another user's data
+- Toast-style flash messages and client-side search filtering (`app.js`) for a more dynamic feel, plus a responsive layout down to mobile widths
 
 ### ⬜ Phase 2: Vulnerable Branch (Next)
 - Reintroduce common vulnerabilities on a separate `vulnerable` git branch: SQL injection, stored XSS, IDOR, broken access control
@@ -49,8 +64,11 @@ A hands-on learning project: building a small web application from scratch (HTML
 ## Security principles applied (Phase 1)
 - **Prepared statements** (`?` placeholders + `bind_param`) — prevents SQL injection
 - **Password hashing** via `password_hash()` (bcrypt + automatic salting) — never storing plain-text passwords
-- **Session-based authentication** — `session_start()`, `$_SESSION`, proper `session_destroy()` on logout
+- **Session-based authentication** — `session_start()`, `$_SESSION`, proper `session_destroy()` on logout, session ID regenerated after login, `httponly` + `samesite=Lax` cookies
 - **Least-privilege database user** — app connects as `webapp_user` scoped only to the `webapp` database, not `root`
 - **Output escaping** via `htmlspecialchars()` — prevents reflected/stored XSS when echoing user input
+- **CSRF tokens** on every form that adds, updates, or deletes data
+- **Authorization checks** — every update/delete query is scoped to `user_id`, so one account can't modify another account's habits, transactions, or goals (no IDOR)
+- **Generic authentication errors** — login never reveals whether a username exists
 
 ## Architecture

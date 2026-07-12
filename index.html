@@ -1,11 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>My First Page</title>
-	<link rel="stylesheet" href="style.css">
+    <title>Security Lab</title>
+    <link rel="stylesheet" href="auth-style.css">
+    <style>
+        .landing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(160deg, #2d6a5f 0%, #0d1f1c 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .landing .logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+        .landing h1 {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+        .landing p {
+            font-size: 16px;
+            opacity: 0.85;
+            max-width: 480px;
+            margin-bottom: 32px;
+        }
+        .landing .cta {
+            display: flex;
+            gap: 16px;
+        }
+        .landing .cta a {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        .landing .cta .primary {
+            background: white;
+            color: #111;
+        }
+        .landing .cta .primary:hover {
+            background: #eee;
+        }
+        .landing .cta .secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .landing .cta .secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
 </head>
 <body>
-	<h1>Hello,World</h1>
-	<p>This is my first web page, running on my own server.</p>
+    <div class="landing">
+        <div class="logo">L</div>
+        <h1>Security Lab</h1>
+        <p>Track your habits, finances, and learning goals in one dashboard &mdash; built from scratch as a hands-on lab for learning full-stack web security.</p>
+        <div class="cta">
+            <a href="login.html" class="primary">Log In</a>
+            <a href="register.html" class="secondary">Sign Up</a>
+        </div>
+    </div>
 </body>
 </html>
