@@ -12,7 +12,7 @@ $type = $_POST['type'] ?? '';
 $validAmount = is_numeric($amount) && (float) $amount > 0;
 $validType = in_array($type, ['income', 'expense'], true);
 
-if ($description === '' || mb_strlen($description) > 255 || !$validAmount || !$validType) {
+if ($description === '' || strlen($description) > 255 || !$validAmount || !$validType) {
     header("Location: finance.php?msg=transaction_error");
     exit();
 }

@@ -7,7 +7,7 @@ csrf_verify();
 $user_id = $_SESSION['user_id'];
 $title = trim($_POST['title'] ?? '');
 
-if ($title === '' || mb_strlen($title) > 150) {
+if ($title === '' || strlen($title) > 150) {
     header("Location: learning.php?msg=goal_error");
     exit();
 }

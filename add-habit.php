@@ -8,7 +8,7 @@ $user_id = $_SESSION['user_id'];
 $name = trim($_POST['habit_name'] ?? '');
 $time = trim($_POST['habit_time'] ?? '');
 
-if ($name === '' || mb_strlen($name) > 100) {
+if ($name === '' || strlen($name) > 100) {
     header("Location: habits.php?msg=habit_error");
     exit();
 }

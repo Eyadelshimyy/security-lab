@@ -5,9 +5,9 @@ $username = trim($_POST['username'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 
-$usernameValid = $username !== '' && mb_strlen($username) <= 50;
+$usernameValid = $username !== '' && strlen($username) <= 50;
 $emailValid = $email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
-$passwordValid = mb_strlen($password) >= 8;
+$passwordValid = strlen($password) >= 8;
 
 if (!$usernameValid || !$emailValid) {
     header("Location: register.html?error=invalid");
