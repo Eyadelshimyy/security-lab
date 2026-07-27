@@ -9,7 +9,13 @@
         goal_added: { text: 'Learning goal added.', type: 'success' },
         goal_updated: { text: 'Progress updated.', type: 'success' },
         goal_deleted: { text: 'Learning goal removed.', type: 'success' },
-        goal_error: { text: 'Please enter a goal title.', type: 'error' }
+        goal_error: { text: 'Please enter a goal title.', type: 'error' },
+        entry_added: { text: 'Journal entry saved.', type: 'success' },
+        entry_deleted: { text: 'Journal entry removed.', type: 'success' },
+        entry_error: { text: 'Please fill in a title and some text.', type: 'error' },
+        profile_updated: { text: 'Profile updated.', type: 'success' },
+        password_updated: { text: 'Password changed.', type: 'success' },
+        profile_error: { text: 'That update could not be completed.', type: 'error' }
     };
 
     function showFlash() {
@@ -53,6 +59,41 @@
             if (emptyState) {
                 emptyState.hidden = visibleCount !== 0 || term === '';
             }
+        });
+    }
+
+    function wireProfileMenu() {
+        var trigger = document.getElementById('profileTrigger');
+        var dropdown = document.getElementById('profileDropdown');
+        if (!trigger || !dropdown) return;
+
+        function close() {
+            dropdown.hidden = true;
+            trigger.setAttribute('aria-expanded', 'false');
+        }
+
+        function open() {
+            dropdown.hidden = false;
+            trigger.setAttribute('aria-expanded', 'true');
+        }
+
+        trigger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (dropdown.hidden) {
+                open();
+            } else {
+                close();
+            }
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!dropdown.hidden && !dropdown.contains(e.target) && e.target !== trigger) {
+                close();
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') close();
         });
     }
 
@@ -121,6 +162,7 @@
         showFlash();
         wireSearch();
         wireDeleteConfirm();
+        wireProfileMenu();
         animateGauges();
         animateBars();
         animateCounters();

@@ -60,6 +60,11 @@ $totalTransactionsQuery->bind_param("i", $user_id);
 $totalTransactionsQuery->execute();
 $totalTransactions = $totalTransactionsQuery->get_result()->fetch_assoc()['total'] ?? 0;
 
+$journalQuery = $conn->prepare("SELECT COUNT(*) as total FROM journal_entries WHERE user_id = ?");
+$journalQuery->bind_param("i", $user_id);
+$journalQuery->execute();
+$journalTotal = $journalQuery->get_result()->fetch_assoc()['total'] ?? 0;
+
 $activeNav = 'home';
 ?>
 <!DOCTYPE html>
@@ -99,7 +104,7 @@ $activeNav = 'home';
                     <a href="habits.php" class="details-btn" style="display:block; text-align:center; text-decoration:none;">Open Habit Tracker</a>
                 </div>
 
-                <div class="bottom-row" style="grid-template-columns: 1fr 1fr;">
+                <div class="bottom-row">
                     <div class="card">
                         <div class="card-header">
                             <h2>Finance Balance</h2>
@@ -118,6 +123,15 @@ $activeNav = 'home';
                         <div class="active-goals-count"><?php echo $learningAvg; ?>%</div>
                         <div class="insight-desc"><?php echo $learningTotal; ?> active goals</div>
                         <a href="learning.php" class="details-btn" style="display:block; text-align:center; text-decoration:none;">Open Learning Tracker</a>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Journal</h2>
+                        </div>
+                        <div class="active-goals-count"><?php echo $journalTotal; ?></div>
+                        <div class="insight-desc">entr<?php echo $journalTotal === 1 ? 'y' : 'ies'; ?> written</div>
+                        <a href="journal.php" class="details-btn" style="display:block; text-align:center; text-decoration:none;">Open Journal</a>
                     </div>
                 </div>
             </div>
@@ -140,6 +154,10 @@ $activeNav = 'home';
                     <div style="flex:1; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
                         <div style="font-size:22px; font-weight:700;"><span data-count-to="<?php echo $learningTotal; ?>">0</span></div>
                         <div style="font-size:11px; color:var(--text-dim);">Learning Goals</div>
+                    </div>
+                    <div style="flex:1; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
+                        <div style="font-size:22px; font-weight:700;"><span data-count-to="<?php echo $journalTotal; ?>">0</span></div>
+                        <div style="font-size:11px; color:var(--text-dim);">Journal Entries</div>
                     </div>
                     <div style="flex:1; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
                         <div style="font-size:22px; font-weight:700; color:var(--accent-strong);"><span data-count-to="<?php echo $overallScore; ?>">0</span>%</div>
