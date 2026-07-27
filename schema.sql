@@ -63,3 +63,16 @@ CREATE TABLE IF NOT EXISTS journal_entries (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS ctf_notes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    room_name VARCHAR(150) NOT NULL,
+    platform VARCHAR(50) NOT NULL DEFAULT 'Other',
+    category VARCHAR(50) NOT NULL DEFAULT 'Misc',
+    status ENUM('not_started', 'in_progress', 'solved') NOT NULL DEFAULT 'not_started',
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

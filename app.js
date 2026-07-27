@@ -15,7 +15,11 @@
         entry_error: { text: 'Please fill in a title and some text.', type: 'error' },
         profile_updated: { text: 'Profile updated.', type: 'success' },
         password_updated: { text: 'Password changed.', type: 'success' },
-        profile_error: { text: 'That update could not be completed.', type: 'error' }
+        profile_error: { text: 'That update could not be completed.', type: 'error' },
+        ctf_added: { text: 'CTF room added.', type: 'success' },
+        ctf_updated: { text: 'Notes saved.', type: 'success' },
+        ctf_deleted: { text: 'CTF room removed.', type: 'success' },
+        ctf_error: { text: 'Please enter a room name.', type: 'error' }
     };
 
     function showFlash() {
@@ -58,6 +62,22 @@
             var emptyState = list.querySelector('[data-search-empty]');
             if (emptyState) {
                 emptyState.hidden = visibleCount !== 0 || term === '';
+            }
+        });
+    }
+
+    function wireThemeToggle() {
+        var toggle = document.getElementById('themeToggle');
+        if (!toggle) return;
+
+        toggle.addEventListener('click', function () {
+            var isRed = document.documentElement.getAttribute('data-theme') === 'red';
+            if (isRed) {
+                document.documentElement.removeAttribute('data-theme');
+                try { localStorage.setItem('theme', 'green'); } catch (e) {}
+            } else {
+                document.documentElement.setAttribute('data-theme', 'red');
+                try { localStorage.setItem('theme', 'red'); } catch (e) {}
             }
         });
     }
@@ -163,6 +183,7 @@
         wireSearch();
         wireDeleteConfirm();
         wireProfileMenu();
+        wireThemeToggle();
         animateGauges();
         animateBars();
         animateCounters();

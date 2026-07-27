@@ -21,6 +21,7 @@ $searchPlaceholder = 'Search journal entries';
 <head>
     <title>Journal</title>
     <link rel="stylesheet" href="dashboard-style.css">
+    <script>(function(){try{if(localStorage.getItem('theme')==='red'){document.documentElement.setAttribute('data-theme','red');}}catch(e){}})();</script>
 </head>
 <body>
     <div class="app-shell">
@@ -45,7 +46,7 @@ $searchPlaceholder = 'Search journal entries';
                 <div class="card">
                     <div class="card-header">
                         <h2>Entries</h2>
-                        <span class="card-tag" style="font-size:11px; color:var(--accent-strong); background:rgba(45,106,95,0.2); padding:4px 10px; border-radius:20px;"><?php echo $entryTotal; ?> total</span>
+                        <span class="tag"><?php echo $entryTotal; ?> total</span>
                     </div>
 
                     <div data-searchable-list>

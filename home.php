@@ -65,6 +65,13 @@ $journalQuery->bind_param("i", $user_id);
 $journalQuery->execute();
 $journalTotal = $journalQuery->get_result()->fetch_assoc()['total'] ?? 0;
 
+$ctfQuery = $conn->prepare("SELECT COUNT(*) as total, SUM(CASE WHEN status = 'solved' THEN 1 ELSE 0 END) as solved FROM ctf_notes WHERE user_id = ?");
+$ctfQuery->bind_param("i", $user_id);
+$ctfQuery->execute();
+$ctfRow = $ctfQuery->get_result()->fetch_assoc();
+$ctfTotal = $ctfRow['total'] ?? 0;
+$ctfSolved = $ctfRow['solved'] ?? 0;
+
 $activeNav = 'home';
 ?>
 <!DOCTYPE html>
@@ -72,6 +79,7 @@ $activeNav = 'home';
 <head>
     <title>Home</title>
     <link rel="stylesheet" href="dashboard-style.css">
+    <script>(function(){try{if(localStorage.getItem('theme')==='red'){document.documentElement.setAttribute('data-theme','red');}}catch(e){}})();</script>
 </head>
 <body>
     <div class="app-shell">
@@ -133,13 +141,22 @@ $activeNav = 'home';
                         <div class="insight-desc">entr<?php echo $journalTotal === 1 ? 'y' : 'ies'; ?> written</div>
                         <a href="journal.php" class="details-btn" style="display:block; text-align:center; text-decoration:none;">Open Journal</a>
                     </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>CTF Notes</h2>
+                        </div>
+                        <div class="active-goals-count"><?php echo $ctfSolved; ?>/<?php echo $ctfTotal; ?></div>
+                        <div class="insight-desc">rooms solved</div>
+                        <a href="ctf.php" class="details-btn" style="display:block; text-align:center; text-decoration:none;">Open CTF Notes</a>
+                    </div>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
                     <h2>Performance Overview</h2>
-                    <span class="card-tag" style="font-size:11px; color:#7fbfae; background:rgba(45,106,95,0.2); padding:4px 10px; border-radius:20px;">Last 7 days</span>
+                    <span class="tag">Last 7 days</span>
                 </div>
 
                 <div style="display:flex; gap:16px; margin-bottom:24px;">

@@ -35,6 +35,7 @@ $searchPlaceholder = 'Search transactions';
 <head>
     <title>Finance</title>
     <link rel="stylesheet" href="dashboard-style.css">
+    <script>(function(){try{if(localStorage.getItem('theme')==='red'){document.documentElement.setAttribute('data-theme','red');}}catch(e){}})();</script>
 </head>
 <body>
     <div class="app-shell">
@@ -87,7 +88,7 @@ $searchPlaceholder = 'Search transactions';
             <div class="card">
                 <div class="card-header">
                     <h2>Transaction History</h2>
-                    <span class="card-tag" style="font-size:11px; color:#7fbfae; background:rgba(45,106,95,0.2); padding:4px 10px; border-radius:20px;"><?php echo count($transactions); ?> total</span>
+                    <span class="tag"><?php echo count($transactions); ?> total</span>
                 </div>
 
                 <div data-searchable-list>

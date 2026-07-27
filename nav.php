@@ -1,15 +1,18 @@
 <?php
-// Expects $activeNav ('home' | 'habits' | 'finance' | 'learning' | 'journal' | 'settings') and $initial to be set by the including page.
+// Expects $activeNav ('home' | 'habits' | 'finance' | 'learning' | 'journal' | 'ctf' | 'settings') and $initial to be set by the including page.
 $navItems = [
     'home' => ['href' => 'home.php', 'label' => 'Home', 'icon' => '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>'],
     'habits' => ['href' => 'habits.php', 'label' => 'Habits', 'icon' => '<polyline points="20 6 9 17 4 12"/>'],
     'finance' => ['href' => 'finance.php', 'label' => 'Finance', 'icon' => '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'],
     'learning' => ['href' => 'learning.php', 'label' => 'Learning', 'icon' => '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'],
     'journal' => ['href' => 'journal.php', 'label' => 'Journal', 'icon' => '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"/>'],
+    'ctf' => ['href' => 'ctf.php', 'label' => 'CTF Notes', 'icon' => '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>'],
 ];
 ?>
 <div class="sidebar">
-    <div class="logo">L</div>
+    <button type="button" class="logo" id="themeToggle" title="Toggle hacker mode">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+    </button>
     <?php foreach ($navItems as $key => $item): ?>
         <a href="<?php echo $item['href']; ?>" class="nav-icon<?php echo $activeNav === $key ? ' active' : ''; ?>" title="<?php echo $item['label']; ?>">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><?php echo $item['icon']; ?></svg>

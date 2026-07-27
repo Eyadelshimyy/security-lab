@@ -14,6 +14,7 @@ $activeNav = 'settings';
 <head>
     <title>Account Settings</title>
     <link rel="stylesheet" href="dashboard-style.css">
+    <script>(function(){try{if(localStorage.getItem('theme')==='red'){document.documentElement.setAttribute('data-theme','red');}}catch(e){}})();</script>
 </head>
 <body>
     <div class="app-shell">
